@@ -6,7 +6,6 @@ import {
   Calendar,
   CheckCircle,
   ChevronRight,
-
   Download,
   FileText,
   Globe,
@@ -15,14 +14,13 @@ import {
   Lock,
   Mail,
   MapPin,
-  
+  Menu,
+  X,
   Phone,
   RefreshCw,
-  
   Shield,
   Smartphone,
   Users,
-  
   Zap,
 } from 'lucide-react'
 
@@ -235,10 +233,20 @@ function LogoMark({ size = 'md' }: { size?: 'sm' | 'md' }) {
   )
 }
 
+// Helper function to get href for tab
+const getTabHref = (tab: string) => {
+  if (tab === 'Rates & Tariffs') return '#rates'
+  if (tab === 'Forms') return '#forms'
+  if (tab === 'Publications') return '#publications'
+  if (tab === 'Media') return '#news'
+  return '#retail'
+}
+
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
   const [newsImageTick, setNewsImageTick] = useState(0)
   const [autoRotateNews, setAutoRotateNews] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -260,6 +268,11 @@ export default function App() {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (media.matches) setAutoRotateNews(false)
   }, [])
+
+  // Close mobile menu when clicking a link
+  const handleTabClick = () => {
+    setMobileMenuOpen(false)
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -306,7 +319,7 @@ export default function App() {
           }`}
         >
           <div className="container mx-auto px-4 sm:px-6">
-            {/* First row: Logo and Internet Banking CTA */}
+            {/* First row: Logo, Internet Banking CTA, and Mobile Menu Button */}
             <div className="flex items-center justify-between">
               <a href="#" className="flex items-center gap-3 no-underline" aria-label="National Bank of Malawi home">
                 <LogoMark size="sm" />
@@ -319,32 +332,78 @@ export default function App() {
                   </span>
                 </div>
               </a>
-              <a
-                href="#login"
-                className="flex items-center gap-2 rounded-full bg-nbm-blue px-5 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-nbm-blue-light"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Internet Banking
-              </a>
+              
+              <div className="flex items-center gap-3">
+                <a
+                  href="#login"
+                  className="flex items-center gap-2 rounded-full bg-nbm-blue px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-nbm-blue-light sm:px-5"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span className="hidden sm:inline">Internet Banking</span>
+                  <span className="inline sm:hidden">Login</span>
+                </a>
+                
+                {/* Mobile menu button */}
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="rounded-lg p-2 text-gray-700 transition hover:bg-gray-100 hover:text-nbm-blue lg:hidden"
+                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                  aria-expanded={mobileMenuOpen}
+                >
+                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
+              </div>
             </div>
 
-            {/* Second row: Horizontal navigation tabs */}
-            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-gray-100 pt-3">
-              {navTabs.map((tab) => (
-                <a
-                  key={tab}
-                  href={
-                    tab === 'Rates & Tariffs' ? '#rates' : 
-                    tab === 'Forms' ? '#forms' : 
-                    tab === 'Publications' ? '#publications' : 
-                    tab === 'Media' ? '#news' : 
-                    '#retail'
-                  }
-                  className="whitespace-nowrap text-sm font-semibold text-gray-700 transition hover:text-nbm-blue"
-                >
-                  {tab}
-                </a>
-              ))}
+            {/* Desktop Navigation Tabs - hidden on mobile, visible on large screens */}
+            <div className="mt-3 hidden border-t border-gray-100 pt-3 lg:block">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                {navTabs.map((tab) => (
+                  <a
+                    key={tab}
+                    href={getTabHref(tab)}
+                    className="whitespace-nowrap text-sm font-semibold text-gray-700 transition hover:text-nbm-blue"
+                  >
+                    {tab}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Menu Dropdown - visible when menu is open */}
+            <div
+              className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+                mobileMenuOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="border-t border-gray-100 pt-3 pb-2">
+                <div className="flex flex-col space-y-2">
+                  {navTabs.map((tab) => (
+                    <a
+                      key={tab}
+                      href={getTabHref(tab)}
+                      onClick={handleTabClick}
+                      className="block rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 hover:text-nbm-blue"
+                    >
+                      {tab}
+                    </a>
+                  ))}
+                </div>
+                {/* Mobile-only utility links */}
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <div className="flex flex-col space-y-2">
+                    <a href="#privacy" onClick={handleTabClick} className="block rounded-lg px-3 py-1.5 text-xs text-gray-500 transition hover:bg-gray-50 hover:text-nbm-blue">
+                      Privacy Policy
+                    </a>
+                    <a href="#terms" onClick={handleTabClick} className="block rounded-lg px-3 py-1.5 text-xs text-gray-500 transition hover:bg-gray-50 hover:text-nbm-blue">
+                      Terms & Conditions
+                    </a>
+                    <div className="px-3 py-1.5 text-xs text-nbm-blue-accent-light">
+                      <span className="font-medium">Inspire Greatness</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </nav>
@@ -376,15 +435,15 @@ export default function App() {
                     href="https://www.banknet360.co.mw"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-nbm-blue px-8 py-3.5 font-semibold text-white shadow-lg transition hover:bg-nbm-blue-light hover:shadow-xl no-underline"
+                    className="inline-flex items-center gap-2 rounded-xl bg-nbm-blue px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-nbm-blue-light hover:shadow-xl no-underline sm:px-8 sm:py-3.5"
                   >
                     <Globe className="h-4 w-4" /> Access BankNet360
                   </a>
                   <a
                     href="#forms"
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-8 py-3.5 font-semibold text-gray-700 shadow-sm transition hover:border-nbm-blue hover:text-nbm-blue no-underline"
+                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 font-semibold text-gray-700 shadow-sm transition hover:border-nbm-blue hover:text-nbm-blue no-underline sm:px-8 sm:py-3.5"
                   >
-                    <Download className="h-4 w-4" /> Register for Internet Banking
+                    <Download className="h-4 w-4" /> Register
                   </a>
                 </div>
                 <div className="flex items-center gap-4 pt-2">
