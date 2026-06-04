@@ -22,6 +22,7 @@ import {
   Smartphone,
   Users,
   Zap,
+  UserPlus,
 } from 'lucide-react'
 
 type ExchangeRate = {
@@ -206,12 +207,12 @@ const banknetFeatures = [
   'Export data to Excel and print statements',
 ]
 
-function LogoMark({ size = 'md' }: { size?: 'sm' | 'md' }) {
+function LogoMark({ size = 'lg' }: { size?: 'sm' | 'md' | 'lg' }) {
   const [logoFailed, setLogoFailed] = useState(false)
   const boxSize =
-    size === 'sm'
-      ? 'h-10 w-28 sm:h-11 sm:w-32'
-      : 'h-11 w-32 sm:h-12 sm:w-40'
+    size === 'lg'
+      ? 'h-16 w-30 sm:h-11 sm:w-32'
+      : 'h-17 w-34 sm:h-12 sm:w-40'
   return (
     <div
       className={`shrink-0 overflow-hidden rounded-xl bg-nbm-blue-dark shadow-md ring-1 ring-white/25 ${boxSize}`}
@@ -323,14 +324,14 @@ export default function App() {
             <div className="flex items-center justify-between">
               <a href="#" className="flex items-center gap-3 no-underline" aria-label="National Bank of Malawi home">
                 <LogoMark size="sm" />
-                <div className="hidden sm:block">
+                {/* <div className="hidden sm:block">
                   <span className="text-base font-bold leading-tight text-gray-900">
                     National Bank
                   </span>
                   <span className="block text-xs font-medium text-nbm-blue">
                     of Malawi plc · The bank of the Nation
                   </span>
-                </div>
+                </div> */}
               </a>
               
               <div className="flex items-center gap-3">
@@ -443,7 +444,7 @@ export default function App() {
                     href="#forms"
                     className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 font-semibold text-gray-700 shadow-sm transition hover:border-nbm-blue hover:text-nbm-blue no-underline sm:px-8 sm:py-3.5"
                   >
-                    <Download className="h-4 w-4" /> Register
+                    <UserPlus className="h-4 w-4" /> Register
                   </a>
                 </div>
                 <div className="flex items-center gap-4 pt-2">
@@ -1063,11 +1064,11 @@ export default function App() {
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <LogoMark size="sm" />
-                <span className="font-semibold leading-tight text-white">
+                {/* <span className="font-semibold leading-tight text-white">
                   National Bank
                   <br />
                   of Malawi plc
-                </span>
+                </span> */}
               </div>
               <p className="text-sm leading-relaxed">
                 Your privacy matters.{' '}
